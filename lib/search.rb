@@ -85,6 +85,7 @@ class Search
     if results.empty?
       puts "No matching records found."
     else
+      puts "Found #{results.size} matching record(s) for '#{query}':"
       results.each { |client| pretty_print(client) }
     end
   end
