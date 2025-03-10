@@ -79,7 +79,12 @@ class Search
     if results.empty?
       puts "No matching records found."
     else
-      results.each { |client| puts client }
+      results.each { |client| pretty_print client }
     end
+  end
+
+  # Print client information
+  def pretty_print(client)
+    puts "Name: #{client["full_name"].ljust(20)} Email: #{client["email"]}"
   end
 end
