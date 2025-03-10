@@ -23,6 +23,9 @@ while buf = Readline.readline(prompt, true)
   case
   when buf.start_with?("exit")
     return
+  when buf.start_with?("search ")
+    buf.slice!("search ")
+    puts data.select{ |client| client["full_name"].include? buf }
   else
     puts "Your input was: '#{buf}'"
   end
