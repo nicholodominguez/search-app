@@ -83,9 +83,9 @@ class Search
     results = @data.select { |client| client["full_name"] =~ regex || client["email"] =~ regex }
 
     if results.empty?
-      puts "No matching records found."
+      puts "\nNo matching records found."
     else
-      puts "Found #{results.size} matching record(s) for '#{query}':"
+      puts "\nFound #{results.size} matching record(s) for '#{query}':\n"
       results.each { |client| pretty_print(client) }
     end
   end
@@ -96,8 +96,9 @@ class Search
                       .select { |_, clients| clients.size > 1 }
                       .values.flatten
     if duplicates.empty?
-      puts "No duplicate emails found."
+      puts "\nNo duplicate emails found."
     else
+      puts "\n"
       duplicates.each { |client| pretty_print(client) }
     end
   end

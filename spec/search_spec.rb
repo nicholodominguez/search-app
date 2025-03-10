@@ -32,7 +32,7 @@ RSpec.describe Search do
     end
 
     it 'returns no records if no match is found' do
-      expect { search_instance.send(:search, 'nonexistent') }.to output("No matching records found.\n").to_stdout
+      expect { search_instance.send(:search, 'nonexistent') }.to output("\nNo matching records found.\n").to_stdout
     end
   end
 
@@ -47,11 +47,11 @@ RSpec.describe Search do
         { "full_name" => "Jin Dahaad", "email" => "long.boi@example.com" }
       ].to_json)
 
-      expect { search_instance.send(:find_duplicates) }.to output("Name: Dreadking Rathalos   Email: dk.rathalos@example.com\nName: Dreadking Rathalos   Email: dk.rathalos@example.com\n").to_stdout
+      expect { search_instance.send(:find_duplicates) }.to output("\nName: Dreadking Rathalos   Email: dk.rathalos@example.com\nName: Dreadking Rathalos   Email: dk.rathalos@example.com\n").to_stdout
     end
 
     it 'shows no duplicates when none exist' do
-      expect { search_instance.send(:find_duplicates) }.to output("No duplicate emails found.\n").to_stdout
+      expect { search_instance.send(:find_duplicates) }.to output("\nNo duplicate emails found.\n").to_stdout
     end
   end
 
