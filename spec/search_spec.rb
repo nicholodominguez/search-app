@@ -54,4 +54,26 @@ RSpec.describe Search do
       expect { search_instance.send(:find_duplicates) }.to output("No duplicate emails found.\n").to_stdout
     end
   end
+
+  describe '#run' do
+    let(:run_instance) { Search.new([]) }
+
+    it 'handles search command input' do
+      allow(Readline).to receive(:readline).and_return("search rathalos", "exit")
+
+      expect { run_instance.run }.to output(/Found 2 matching record\(s\) for 'rathalos'/).to_stdout
+    end
+
+    it 'handles find_dup command input' do
+      allow(Readline).to receive(:readline).and_return("find_dup", "exit")
+
+      expect { run_instance.run }.to output(/No duplicate emails found/).to_stdout
+    end
+
+    it 'handles unknown command input' do
+      allow(Readline).to receive(:readline).and_return("unknown", "exit")
+
+      expect { run_instance.run }.to output(/Unknown command\: \'unknown\'/).to_stdout
+    end
+  end
 end
