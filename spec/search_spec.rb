@@ -35,4 +35,23 @@ RSpec.describe Search do
       expect { search_instance.send(:search, 'nonexistent') }.to output("No matching records found.\n").to_stdout
     end
   end
+
+  describe '#find_duplicates' do
+    let(:search_instance) { Search.new([]) }
+
+    it 'finds duplicate emails' do
+      allow(File).to receive(:read).and_return([
+        { "full_name" => "Dreadking Rathalos", "email" => "dk.rathalos@example.com" },
+        { "full_name" => "Dreadking Rathalos", "email" => "dk.rathalos@example.com" },
+        { "full_name" => "Guardian Rathalos", "email" => "guardian.rathalos@example.com" },
+        { "full_name" => "Jin Dahaad", "email" => "long.boi@example.com" }
+      ].to_json)
+
+      expect { search_instance.send(:find_duplicates) }.to output("Name: Dreadking Rathalos   Email: dk.rathalos@example.com\nName: Dreadking Rathalos   Email: dk.rathalos@example.com\n").to_stdout
+    end
+
+    it 'shows no duplicates when none exist' do
+      expect { search_instance.send(:find_duplicates) }.to output("No duplicate emails found.\n").to_stdout
+    end
+  end
 end
