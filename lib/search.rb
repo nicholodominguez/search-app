@@ -12,13 +12,13 @@ class Search
   def initialize(args)
     @options = {}
 
-    OptionParser.new do |args|
-      args.on("-f", "--file FILENAME", "Filename to be read") do |value|
+    OptionParser.new do |opts|
+      opts.on("-f", "--file FILENAME", "Filename to be read") do |value|
         @options[:file_name] = value
       end
 
-      args.on("-h", "--help", "Prints this help") do
-        puts args
+      opts.on("-h", "--help", "Prints this help") do
+        puts opts
         exit
       end
     end.parse!
@@ -54,7 +54,7 @@ class Search
     HELP
 
     while (buf = Readline.readline("> ", true))
-      buf = buf.strip
+      buf.strip!
       case
       when buf.start_with?("exit")
         return
@@ -75,11 +75,17 @@ class Search
 
   # Search for records containing the query string in the 'full_name' field
   def search(query)
-    results = @data.select { |client| client["full_name"].include?(query) }
+    query = query.strip.downcase
+    return puts "Search query cannot be empty." if query.empty?
+
+    # Use a regular expression
+    regex = Regexp.new(query, Regexp::IGNORECASE)
+    results = @data.select { |client| client["full_name"] =~ regex || client["email"] =~ regex }
+
     if results.empty?
       puts "No matching records found."
     else
-      results.each { |client| pretty_print client }
+      results.each { |client| pretty_print(client) }
     end
   end
 
@@ -91,12 +97,12 @@ class Search
     if duplicates.empty?
       puts "No duplicate emails found."
     else
-      duplicates.each { |client| pretty_print client }
+      duplicates.each { |client| pretty_print(client) }
     end
   end
 
   # Print client information
   def pretty_print(client)
-    puts "Name: #{client["full_name"].ljust(20)} Email: #{client["email"]}"
+    puts "Name: #{client['full_name'].ljust(20)} Email: #{client['email']}"
   end
 end
