@@ -20,3 +20,6 @@ git clone https://github.com/nicholodominguez/search-app.git
 Options:
 * `-f FILENAME`
   * This will use the json file supplied as data, otherwise it will resort to `clients.json`
+
+> [!WARNING]
+> You may need to run `chmod +x search_cli.rb` to grant execute permissions
