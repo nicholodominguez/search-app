@@ -64,11 +64,11 @@ class Search
       when buf.eql?("find_dup")
         find_duplicates
       else
-        puts "Your input was: '#{buf}'"
+        puts "Unknown command: '#{buf}'"
       end
     end
-  rescue Errors => e
-    puts e.message
+  rescue StandardError => e
+    puts "Error: #{e.message}"
   end
 
   private
