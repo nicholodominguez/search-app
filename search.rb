@@ -26,6 +26,8 @@ while buf = Readline.readline(prompt, true)
   when buf.start_with?("search ")
     buf.slice!("search ")
     puts data.select{ |client| client["full_name"].include? buf }
+  when buf.eql?("find_dup")
+    puts data.group_by { |client| client["email"] }.values.select { |a| a.size > 1 }.flatten
   else
     puts "Your input was: '#{buf}'"
   end
