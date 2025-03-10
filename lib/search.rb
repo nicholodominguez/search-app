@@ -62,7 +62,7 @@ class Search
         query = buf.sub(/^search\s+/, '')
         search(query)
       when buf.eql?("find_dup")
-        puts @data.group_by { |client| client["email"] }.values.select { |a| a.size > 1 }.flatten
+        find_duplicates
       else
         puts "Your input was: '#{buf}'"
       end
@@ -80,6 +80,18 @@ class Search
       puts "No matching records found."
     else
       results.each { |client| pretty_print client }
+    end
+  end
+
+  # Find records with duplicate emails
+  def find_duplicates
+    duplicates = @data.group_by { |client| client["email"] }
+                      .select { |_, clients| clients.size > 1 }
+                      .values.flatten
+    if duplicates.empty?
+      puts "No duplicate emails found."
+    else
+      duplicates.each { |client| pretty_print client }
     end
   end
 
