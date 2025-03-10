@@ -23,3 +23,9 @@ Options:
 
 > [!WARNING]
 > You may need to run `chmod +x search_cli.rb` to grant execute permissions
+
+### Testing
+1. Run the spec for `Search`
+```bash
+rspec spec/search_spec.rb
+```
