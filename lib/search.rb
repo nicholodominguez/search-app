@@ -23,10 +23,20 @@ class Search
       end
     end.parse!
 
-    filename = @options[:file_name].nil? ? "clients.json" : @options[:file_name]
+    # Use default json file if no file name is supplied
+    filename = @options[:file_name] || "clients.json"
 
-    file = File.read(filename)
-    @data = JSON.parse(file)
+    # Read and parse file
+    begin
+      file = File.read(filename)
+      @data = JSON.parse(file)
+    rescue Errno::ENOENT
+      puts "Error: File '#{filename}' not found."
+      exit
+    rescue JSON::ParserError
+      puts "Error: Failed to parse JSON in '#{filename}'."
+      exit
+    end
   end
 
   def run
@@ -37,6 +47,7 @@ class Search
     Commands:
     - search [STRING]: Searches the dataset with records containing STRING in their full_name
     - find_dup: Returns records with duplicate emails
+    - exit: Exit the program
     ===================================================================================================
 
 
