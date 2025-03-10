@@ -53,14 +53,14 @@ class Search
 
     HELP
 
-    while buf = Readline.readline("> ", true)
-      buf = buf.to_s
+    while (buf = Readline.readline("> ", true))
+      buf = buf.strip
       case
       when buf.start_with?("exit")
         return
       when buf.start_with?("search ")
-        buf.slice!("search ")
-        puts @data.select{ |client| client["full_name"].include? buf }
+        query = buf.sub(/^search\s+/, '')
+        search(query)
       when buf.eql?("find_dup")
         puts @data.group_by { |client| client["email"] }.values.select { |a| a.size > 1 }.flatten
       else
@@ -69,5 +69,17 @@ class Search
     end
   rescue Errors => e
     puts e.message
+  end
+
+  private
+
+  # Search for records containing the query string in the 'full_name' field
+  def search(query)
+    results = @data.select { |client| client["full_name"].include?(query) }
+    if results.empty?
+      puts "No matching records found."
+    else
+      results.each { |client| puts client }
+    end
   end
 end
